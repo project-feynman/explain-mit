@@ -6,31 +6,30 @@
       :roomId="roomId"
     />
 
-    <RealtimeSpaceTwilioRoom 
+    <VideoConferenceRoom
       :roomID="roomId"
-      :willMuteByDefault="true"
+      :isCommonRoom="isCommonRoom"
       :key="incrementToDestroyComponent"
-      @disconnect="incrementToDestroyComponent += 1"
     />
 
     <!-- For wiping all the blackboards -->
-    <v-dialog v-model="isWipeBoardsPopupOpen">
+    <v-dialog v-model="isWipeBoardsPopupOpen" max-width="700">
       <v-card>
         <v-card-title>
           Are you sure you want to wipe the pen strokes of every blackboard in this room?
         </v-card-title>
         <v-card-actions>
           <v-spacer/>
-          <v-btn @click="isWipeBoardsPopupOpen = false">CANCEL</v-btn>
-          <v-btn @click="cloudFunctionsDelete(); isWipeBoardsPopupOpen = false;">
-            WIPE ALL STROKES
+          <v-btn @click="isWipeBoardsPopupOpen = false" text>CANCEL</v-btn>
+          <v-btn @click="cloudFunctionsDelete(); isWipeBoardsPopupOpen = false;" color="accent">
+            YES, WIPE ALL STROKES
           </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
 
     <!-- For saving all the whiteboards -->
-    <v-dialog v-model="isSaveBoardsPopupOpen">
+    <v-dialog v-model="isSaveBoardsPopupOpen" max-width="700">
       <v-card>
         <v-card-title>
           This will save your sequence of blackboard explanations into the library. 
@@ -50,7 +49,7 @@
     </v-dialog>
 
     <!-- For wiping the PDFs -->
-    <v-dialog v-model="isClearPDFsPopupOpen">
+    <v-dialog v-model="isClearPDFsPopupOpen" max-width="700">
       <v-card>
         <v-card-title>
           This will remove the PDFs seeded on each blackboard, but will not wipe the pen strokes. 
@@ -67,7 +66,7 @@
     </v-dialog>
 
     <!-- Update status -->
-    <v-dialog v-model="isRoomStatusPopupOpen">
+    <v-dialog v-model="isRoomStatusPopupOpen" max-width="700">
       <v-card>
         <v-card-title>
           Update status to communicate across different rooms
@@ -87,7 +86,7 @@
       </v-card>
     </v-dialog>
 
-    <v-dialog v-model="isRenameRoomPopupOpen">
+    <v-dialog v-model="isRenameRoomPopupOpen" max-width="700">
       <v-card>
         <v-card-title>
           Rename the room to designate it for another purpose
@@ -193,7 +192,7 @@ import { mapState } from "vuex";
 import RealtimeBlackboard from "@/components/RealtimeBlackboard.vue";
 import HandleUpdatingParticipants from "@/components/HandleUpdatingParticipants.vue";
 import { getRandomId } from "@/helpers.js";
-import RealtimeSpaceTwilioRoom from "@/components/RealtimeSpaceTwilioRoom.vue";
+import VideoConferenceRoom from "@/components/VideoConferenceRoom.vue";
 
 export default {
   props: {
@@ -211,9 +210,9 @@ export default {
   components: {
     HandleUpdatingParticipants,
     RealtimeBlackboard,
-    RealtimeSpaceTwilioRoom,
     BaseButton,
     BaseIconButton,
+    VideoConferenceRoom
   },
   mixins: [
     DatabaseHelpersMixin,

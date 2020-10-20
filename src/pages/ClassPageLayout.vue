@@ -48,7 +48,7 @@
       </template>
     </v-navigation-drawer>
 
-    <v-main style="overflow-x: auto;">
+    <v-main style="overflow-x: auto; height: 100%;">
       <portal-target name="main-content" style="height: 100%;">
         
       </portal-target>

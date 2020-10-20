@@ -141,6 +141,21 @@
         </div>      
 
         <template v-if="!currentRoomID">
+          <div class="pl-3">
+            <p v-for="p in roomIDToParticipants[sectionID]" :key="p.id"
+              style="font-weight: 400; font-size: 0.8em"
+              :class="`text--secondary mb-0 d-flex ${ `${p.firstName} ${p.lastName}` === dominantSpeaker.name ? 'font-weight-black' : ''}`"
+            >
+              {{ p.firstName + " " + p.lastName }}
+              <v-spacer/>
+              {{ "#" + p.currentBoardNumber }} 
+              <v-icon small class="mx-2" :color="p.canHearAudio ? 'green' : 'red'">
+                {{ p.canHearAudio ? "mdi-phone-check" : "mdi-phone-off" }}
+              </v-icon>
+            </p>
+          </div>
+
+          <!-- The below is now useless -->
           <portal-target  name="current-room-participants">
 
           </portal-target>
@@ -174,7 +189,7 @@
       </div>
     </v-list-item> 
 
-    <!-- OTHER ROOMS -->
+    <!-- NON-COMMON ROOMS -->
      <v-list-item v-for="(room, i) in nonCommonRooms" :key="room.id"
       :to="`/class/${classID}/section/${sectionID}/room/${room.id}`"
       active-class="active-blackboard accent--text"
@@ -205,8 +220,25 @@
             <v-spacer/>
           </div>
 
+          <!-- TODO: display speakers as usual but just highlight them / add mute status --> 
+          <!-- Keep track of an updated data structure storing the mute status of each participant -->
+          <div class="pl-3">
+            <p v-for="p in roomIDToParticipants[room.id]" :key="p.id"
+              style="font-weight: 400; font-size: 0.8em"
+              :class="`text--secondary mb-0 d-flex ${ `${p.firstName} ${p.lastName}` === dominantSpeaker.name ? 'font-weight-black' : ''}`"
+            >
+              {{ p.firstName + " " + p.lastName }}
+              <v-spacer/>
+              {{ "#" + p.currentBoardNumber }} 
+              <v-icon small class="mx-2" :color="p.canHearAudio ? 'green' : 'red'">
+                {{ p.canHearAudio ? "mdi-phone-check" : "mdi-phone-off" }}
+              </v-icon>
+            </p>
+          </div>
+          
+          <!-- Now useless -->
           <portal-target name="current-room-participants">
-
+            
           </portal-target>
         </div>
       </template>
