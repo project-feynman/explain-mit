@@ -23,7 +23,7 @@
 
         <v-card-text>
           <ol>
-            <li>Force quit Safari (iPad) or clear browser cache (laptop), then reload the website<./li>
+            <li>Force quit Safari (iPad) or clear browser cache (laptop), then reload the website.</li>
             <li>Press "JOIN VIDEO ROOM", then look for a phrase similar to "Launch in web" (DON'T download the app!)</li>
             <li>Check microphone settings in browser (usually an icon near "https://expl...")</li>
           </ol>
@@ -31,7 +31,7 @@
           <p class="mt-5">Other tips</p>
           <ul>
             <li>For beyond 10+ participants, use Zoom for AV and Explain for blackboard.</li>
-            <li>If there are echoes, make sure you have only <u>one unmuted device</u> at any given time./li>
+            <li>If there are echoes, make sure you have only <u>one unmuted device</u> at any given time.</li>
             <li>If you have low bandwidth, turn off video and hang up Jitsi whenever you're not using it.</li>
           </ul>
         </v-card-text>

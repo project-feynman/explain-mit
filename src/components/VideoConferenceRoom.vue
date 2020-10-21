@@ -28,7 +28,7 @@
 
     <div v-if="isUsingJisti"
       id="jisti-video-conference" 
-      :style="`height: ${isCommonRoom ? '70vh' : '300px'}`"
+      :style="`height: ${isCommonRoom ? '500px' : '500px'}`"
     >
 
     </div>
