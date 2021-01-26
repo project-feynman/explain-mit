@@ -19,7 +19,7 @@
       <canvas ref="FrontCanvas" class="front-canvas"
         @touchstart="e => touchStart(e)"
         @touchmove="e => touchMove(e)"
-        @touchend="e => handleLiftingContactFromBlackboard(e)"
+        @touchend="e => touchEnd(e)"
         @mousedown="e => mouseDown(e)"
         @mousemove="e => mouseMove(e)"
         @mouseup="e => mouseUp(e)"
@@ -71,17 +71,7 @@
  */
 import BlackboardToolBar from "@/components/BlackboardToolBar.vue";
 import CanvasDrawMixin from "@/mixins/CanvasDrawMixin.js";
-import { 
-  BlackboardTools, 
-  RecordState, 
-  navbarHeight, 
-  toolbarHeight, 
-  LANDSCAPE_WIDTH,
-  VERTICAL_MODE_WIDTH,
-  PPT_SLIDE_RATIO,
-  PDF_RATIO,
-  MASSIVE_MODE_DIMENSIONS
-} from "@/CONSTANTS.js";
+import { BlackboardTools, MASSIVE_MODE_DIMENSIONS } from "@/CONSTANTS.js";
 
 import { getRandomId, isIosSafari } from "@/helpers.js";
 import { mapState } from "vuex";
@@ -213,6 +203,7 @@ export default {
      * Because every stroke is processed here, UI => strokesArray.
      */
     handleEndOfStroke (newStroke) {
+      newStroke.endTime = Number(this.currentTime.toFixed(1));
       newStroke.id = getRandomId(); 
       this.localStrokesArray.push(newStroke);
       this.$emit("stroke-drawn", newStroke);
@@ -240,7 +231,6 @@ export default {
         strokeNumber: this.strokesArray.length + 1,
         startTime: Number(this.currentTime.toFixed(1)),
         color: this.currentTool.color,
-        // color: this.user.currentPenColor,
         lineWidth: this.currentTool.lineWidth,
         isErasing: this.isNormalEraser,
         points: [],
@@ -305,7 +295,6 @@ export default {
           this.isNormalEraser || this.isStrokeEraser, // `isErasing`,
           this.ctx,
           this.currentTool.color,
-          // this.user.currentPenColor,
           this.currentTool.lineWidth,
         );
       }
@@ -341,6 +330,7 @@ export default {
       // mark the stroke as erased so it can be ignored by future stroke erasers
       stroke.wasErased = true;
       const antiStroke = {
+        startTime: Number(this.currentTime.toFixed(1)),
         isErasing: true,
         strokeNumber: this.strokesArray.length + 1,
         lineWidth: stroke.lineWidth + 2,
@@ -351,18 +341,14 @@ export default {
     },
     mouseUp (e) {
       this.isHoldingLeftClick = false;
-      this.handleLiftingContactFromBlackboard(e);
+      this.handleEndOfStroke(this.currentStroke); 
     },
-    handleLiftingContactFromBlackboard (e) {
-      e.preventDefault();
-      // WARNING: this is more complicated and potentially bug-introducing than you think
-      // MAYBE this method should be designed in a way that it isn't fired in the first place
-     // if (this.isNotValidTouch(e)) return; // THIS
-      if (e.touches && this.onlyAllowApplePencil) return; 
-      if (this.currentStroke.points.length === 0) return; 
-      //////
-      this.currentStroke.endTime = Number(this.currentTime.toFixed(1));
-      this.handleEndOfStroke(this.currentStroke);
+    touchEnd (e) {
+      if (! this.isDrawingWithApplePencil && this.onlyAllowApplePencil) {
+        return; 
+      }
+      e.preventDefault(); 
+      this.handleEndOfStroke(this.currentStroke); 
     },
     async resetBlackboard () {
       this.wipeUI();
@@ -522,7 +508,6 @@ export default {
       dummyCanvas.height = 24;
       const ctx = dummyCanvas.getContext("2d");
       ctx.fillStyle = this.isPen ? this.currentTool.color : "#fff";
-      // ctx.fillStyle = this.isPen ? this.user.currentPenColor : "#fff";
       ctx.font = "24px 'Material Design Icons'";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
@@ -545,6 +530,7 @@ export default {
         throw new Error(
           `Rep invariant violated: external, internal lengths are ${this.strokesArray.length}, ${this.localStrokesArray.length}`
         );
+        alert("Blackboard broke for some unknown reason, reload the page while I figure out why!");
       }
     },
     isNotValidTouch (e) {
