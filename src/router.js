@@ -25,6 +25,10 @@ const router = new Router({
       }
     },
     {
+      path: "/twitter-clone",
+      component: () => import(/* webpackChunkName: "music-playground" */ "./components/TwitterClone.vue")
+    },
+    {
       path: "/music-playground",
       component: () => import(/* webpackChunkName: "music-playground" */ "./components/MusicPlayer.vue")
     },
