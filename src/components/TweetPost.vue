@@ -41,6 +41,9 @@ import db from "@/database.js";
 
 import GeneralButton from "@/components/GeneralButton.vue"; 
 
+// Given an object with property "content", display a card with 
+// string value === content 
+
 export default {
   components: {
     GeneralButton
@@ -53,6 +56,7 @@ export default {
   },
   methods: {
     // duplicates for now
+    // private void 
     shareTweet () {
       db.collection("tweets").add({
         content: this.tweetData.content
